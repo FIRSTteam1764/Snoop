@@ -20,6 +20,7 @@ public class OI {
   // You create one by telling it which joystick it's on and which button
   // number it is.
    public static Joystick stick = new Joystick(0);
+   
   // Button button = new JoystickButton(stick, buttonNumber);
 
   // There are a few additional built in buttons you can use. Additionally,

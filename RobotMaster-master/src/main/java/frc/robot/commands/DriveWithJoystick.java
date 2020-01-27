@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
@@ -28,8 +29,8 @@ public class DriveWithJoystick extends Command {
     double left = (OI.stick.getY() - OI.stick.getZ());
     double right = (OI.stick.getY() + OI.stick.getZ());
 
-    Robot.chassis.setLeft(left, OI.stick.getThrottle());
-    Robot.chassis.setRight(right, OI.stick.getThrottle());
+    Robot.chassis.setLeft(left, OI.stick.getRawAxis(3));
+    Robot.chassis.setRight(right, OI.stick.getRawAxis(3));
   } 
 
   // Make this return true when this Command no longer needs to run execute()

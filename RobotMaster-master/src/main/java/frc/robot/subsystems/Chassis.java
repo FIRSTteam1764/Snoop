@@ -22,13 +22,25 @@ public class Chassis extends Subsystem {
   Spark right2 = new Spark(9);
 
   public void setLeft(double _speed, double _throttle){
-    left1.set(-_speed);
-    left2.set(-_speed);
+    left1.set(inDeadZone(-_speed*_throttle)  ? positiveOrNegative(-_speed*_throttle) : -_speed*_throttle);
+    left2.set(inDeadZone(-_speed*_throttle) ? positiveOrNegative(-_speed*_throttle) : -_speed*_throttle);
   }
 
   public void setRight(double _speed, double _throttle){
-    right1.set(_speed);
-    right2.set(_speed);
+    right1.set(inDeadZone(_speed*_throttle) ? positiveOrNegative(_speed*_throttle) : _speed*_throttle);
+    right2.set(inDeadZone(_speed*_throttle) ? positiveOrNegative(_speed*_throttle) : _speed*_throttle);
+  }
+
+  public boolean inDeadZone(double speed){
+    return speed>.75 || speed<-.75;
+  }
+
+  public double positiveOrNegative(double speed){
+    if(speed>0){
+      return .75;
+    }
+
+     return -.75;
   }
 
   @Override
