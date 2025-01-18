@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
    */
   public Robot() {
     controller = new XboxController(0);
+    joystick = new Joystick(1);
   
     frontRight = new PWMTalonSRX(0); 
     frontLeft = new PWMTalonSRX(7);
@@ -56,8 +57,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    double leftPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), true);
-    double rightPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), false);
+    //double leftPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), true);
+    //double rightPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), false);
+    double leftPower = joystick.getY() + arcadeDrive.getX(joystick.getX(), true);
+    double rightPower = joystick.getY() + arcadeDrive.getX(joystick.getX(), false);
     leftPower = (Math.abs(leftPower) < deadzone)? 0 : leftPower;
     rightPower = (Math.abs(rightPower) < deadzone)? 0 : rightPower;
     frontLeft.set(leftPower*maxspeed);
