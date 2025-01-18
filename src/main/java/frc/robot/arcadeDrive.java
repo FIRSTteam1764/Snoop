@@ -15,9 +15,10 @@ public class arcadeDrive extends SubsystemBase {
 
   public static double getX(double x, boolean left) {
     boolean giveback = false;
+    //if right wheels control and trying to turn left
     if (x<0 && !left) {
       giveback = true;
-      x*=1;
+      x*=1; //go backwards
     } else if (x>0 && left) {
       giveback = true;
       x*=-1;
