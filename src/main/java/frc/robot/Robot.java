@@ -5,15 +5,11 @@
 package frc.robot;
 
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -30,8 +26,9 @@ public class Robot extends TimedRobot {
   public XboxController controller;
   public Joystick joystick;
   public Boolean stick;
+  public Boolean arcadeyes;
   public final double deadzone = 0.07;
-  public final double maxspeed = 0.5;
+  public final double maxspeed = 0.25; // SPEEEEEEEEEEEEEED - percent wise
 
 
   /**
@@ -53,7 +50,8 @@ public class Robot extends TimedRobot {
     frontLeft.addFollower(backLeft);
     frontLeft.setInverted(true);
 
-    stick = true;
+    stick = false;
+    arcadeyes = true;
 
   }
 
@@ -69,25 +67,21 @@ public class Robot extends TimedRobot {
     double leftPower;
     double rightPower;
 
-    if (stick) {
-      leftPower = joystick.getY() + arcadeDrive.getX(joystick.getX(), true);
-      rightPower = joystick.getY() + arcadeDrive.getX(joystick.getX(), false);
+    if (controller.getAButton()) {
+      arcadeyes = arcadeyes;
+    }
+    if (arcadeyes) {
+      leftPower = arcadeDrive.arcade(controller.getLeftY(), controller.getLeftX(), true)*maxspeed;
+      rightPower = arcadeDrive.arcade(controller.getLeftY(), controller.getLeftX(), false)*maxspeed;
     } else {
-      leftPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), true);
-      rightPower = controller.getLeftY() + arcadeDrive.getX(controller.getLeftX(), false);
+      leftPower = tankDrive.tank(controller.getLeftY(), controller.getRightY(), true)*maxspeed;
+      rightPower = tankDrive.tank(controller.getLeftY(), controller.getRightY(), false)*maxspeed;
     }
+    
 
-    if (joystick.getRawButton(6)) {
-      stick=!stick; 
-    } else if (controller.getAButton()) {
-      stick=!stick;
-    }
-
-    leftPower = (Math.abs(leftPower) < deadzone)? 0 : leftPower;
-    rightPower = (Math.abs(rightPower) < deadzone)? 0 : rightPower;
-
-    frontLeft.set(leftPower*maxspeed);
-    frontRight.set(rightPower*maxspeed);
+    
+    frontLeft.set(leftPower);
+    frontRight.set(rightPower);
     
     //pdh is fried apparently
     // SmartDashboard.putNumber("FrontLeft", pdh.getCurrent(0));
